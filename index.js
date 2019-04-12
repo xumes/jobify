@@ -11,8 +11,6 @@ app.get("/", (req, res) => {
   });
 });
 
-
-
 app.listen(3000, err => {
   if (err) {
     console.log("não foi possível iniciar o servidor");
