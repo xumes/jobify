@@ -24,8 +24,13 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.get("/vaga", (req, res) => {
-  res.render("vaga");
+app.get("/vaga/:id", async (req, res) => {
+  const vagaId = req.params.id
+  const db = await dbConnection;
+  const vaga = await db.get(`SELECT * from vagas where id=${vagaId};`);
+  res.render("vaga", {
+    vaga
+  });
 });
 
 const init = async () => {
