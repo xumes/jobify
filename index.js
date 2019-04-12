@@ -25,12 +25,41 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/vaga/:id", async (req, res) => {
-  const vagaId = req.params.id
+  const vagaId = req.params.id;
   const db = await dbConnection;
   const vaga = await db.get(`SELECT * from vagas where id=${vagaId};`);
   res.render("vaga", {
     vaga
   });
+});
+
+app.get("/admin", (req, res) => {
+  res.render("admin/home");
+});
+
+app.get("/admin/vagas", async (req, res) => {
+  const db = await dbConnection;
+  const vagas = await db.all("SELECT * from vagas;");
+  res.render("admin/vagas", {
+    vagas
+  });
+});
+
+app.get("/admin/vagas/delete/:id", async (req, res) => {
+  const db = await dbConnection;
+  const id = req.params.id;
+  console.log("apagando a vaga", id);
+  await db.run(`DELETE from vagas where id = ${id};`);
+  res.redirect("/admin/vagas");
+});
+
+app.get("/admin/vagas/editar/:id", async (req, res) => {
+  console.log("ediatndo a vaga", req.params.id);
+  res.render("admin/home");
+});
+
+app.get("/admin/vagas/nova", (req, res) => {
+  res.render("admin/vaga/nova");
 });
 
 const init = async () => {
