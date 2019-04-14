@@ -10,7 +10,7 @@ const dbConnection = sqlite.open(path.resolve(__dirname, "jobify.sqlite"), {
 });
 
 app.use("/admin", (req, res, next) => {
-  if (req.hostname) {
+  if (req.hostname === 'localhost') {
     next();
   } else {
     res.send("Only Admin people can access this route");
