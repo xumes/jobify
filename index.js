@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 
 const sqlite = require("sqlite");
@@ -6,6 +7,7 @@ const dbConnection = sqlite.open("jobify.sqlite", { Promise });
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", async (req, res) => {
   const db = await dbConnection;
@@ -58,8 +60,22 @@ app.get("/admin/vagas/editar/:id", async (req, res) => {
   res.render("admin/home");
 });
 
-app.get("/admin/vagas/nova", (req, res) => {
-  res.render("admin/vaga/nova");
+app.get("/admin/vagas/nova", async (req, res) => {
+  const db = await dbConnection;
+  const categoriasDb = await db.all("SELECT * from categorias;");
+  console.log("categorias do banco", categoriasDb)
+  res.render("admin/vaga/nova", {
+    categorias: categoriasDb
+  });
+});
+
+app.post("/admin/vagas/nova", async (req, res) => {
+  const db = await dbConnection;
+  const { titulo, descricao, categoria } = req.body;
+  await db.run(
+    `INSERT INTO vagas(categoria, titulo, descricao) values(${categoria}, '${titulo}', '${descricao}')`
+  );
+  res.redirect("/admin/vagas");
 });
 
 const init = async () => {
@@ -70,11 +86,6 @@ const init = async () => {
   await db.run(
     "create table if not exists vagas (id INTEGER PRIMARY KEY, categoria INTEGER, titulo TEXT, descricao TEXT);"
   );
-  //const categoria = 'Marketing team';
-  // const cat = 2
-  // const vagaTitulo = 'Digital Marketing (San Francisco)'
-  // const vagaDescr = 'excelent benefits'
-  // await db.run(`INSERT INTO vagas(categoria, titulo, descricao) values(${cat}, '${vagaTitulo}', '${vagaDescr}')`)
 };
 
 init();

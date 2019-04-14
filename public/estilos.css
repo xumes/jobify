@@ -26,3 +26,26 @@ ul {
     padding-left: 0;
 }
 
+label {
+    display: block;
+    margin: 20px 0 4px 0;
+}
+
+input, select{
+    padding: 6px;
+    width: 540px;
+}
+
+textarea {
+    padding: 6px;
+    width: 540px;
+    height: 320px;
+}
+
+button{
+    display: block;
+    padding: 12px;
+    margin: 20px 0 4px 0;
+    background-color: blue;
+    color: white;
+}
