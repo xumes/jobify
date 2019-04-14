@@ -4,7 +4,7 @@
   "description": "Jobify is a simple job board for sites",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js"
   },
   "keywords": [
     "jobify",
