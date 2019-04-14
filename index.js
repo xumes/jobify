@@ -5,9 +5,9 @@ const app = express();
 const path = require("path");
 
 const sqlite = require("sqlite");
-const dbConnection = sqlite.open(
-  path.resolve(__dirname, "jobify.sqlite", { Promise })
-);
+const dbConnection = sqlite.open(path.resolve(__dirname, "jobify.sqlite"), {
+  Promise
+});
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
