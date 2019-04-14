@@ -55,15 +55,10 @@ app.get("/admin/vagas/delete/:id", async (req, res) => {
   res.redirect("/admin/vagas");
 });
 
-app.get("/admin/vagas/editar/:id", async (req, res) => {
-  console.log("ediatndo a vaga", req.params.id);
-  res.render("admin/home");
-});
-
 app.get("/admin/vagas/nova", async (req, res) => {
   const db = await dbConnection;
   const categoriasDb = await db.all("SELECT * from categorias;");
-  console.log("categorias do banco", categoriasDb)
+  console.log("categorias do banco", categoriasDb);
   res.render("admin/vaga/nova", {
     categorias: categoriasDb
   });
@@ -74,6 +69,28 @@ app.post("/admin/vagas/nova", async (req, res) => {
   const { titulo, descricao, categoria } = req.body;
   await db.run(
     `INSERT INTO vagas(categoria, titulo, descricao) values(${categoria}, '${titulo}', '${descricao}')`
+  );
+  res.redirect("/admin/vagas");
+});
+
+app.get("/admin/vagas/editar/:id", async (req, res) => {
+  const db = await dbConnection;
+  const categoriasDb = await db.all("SELECT * from categorias;");
+  const id = req.params.id;
+  const vaga = await db.get(`SELECT * from vagas where id=${id};`);
+  console.log("categorias do banco", categoriasDb);
+  res.render("admin/vaga/editar", {
+    categorias: categoriasDb,
+    vaga
+  });
+});
+
+app.post("/admin/vagas/editar/:id", async (req, res) => {
+  const db = await dbConnection;
+  const { id } = req.params;
+  const { titulo, descricao, categoria } = req.body;
+  await db.run(
+    `UPDATE vagas SET categoria=${categoria}, titulo="${titulo}", descricao="${descricao}" WHERE id=${id}`
   );
   res.redirect("/admin/vagas");
 });
