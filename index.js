@@ -9,6 +9,14 @@ const dbConnection = sqlite.open(path.resolve(__dirname, "jobify.sqlite"), {
   Promise
 });
 
+app.use("/admin", (req, res, next) => {
+  if (req.hostname) {
+    next();
+  } else {
+    res.send("Only Admin people can access this route");
+  }
+});
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
